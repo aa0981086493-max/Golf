@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f8f4f0; color: #4a3728; font-family: -apple-system, sans-serif; }
+        .card { background: white; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .btn-primary { background-color: #8d6e63; color: white; }
+        input { background-color: #fafafa; border: 1px solid #e0e0e0; border-radius: 12px; padding: 14px; width: 100%; margin-bottom: 4px; }
+        label { font-size: 11px; color: #8a7a6a; font-weight: bold; display: block; }
+    </style>
+</head>
+<body class="p-4 max-w-md mx-auto">
+    <h1 class="text-2xl font-bold text-stone-800">⛳️ 上品高爾夫</h1>
+    <p class="text-xs text-stone-400 mb-6">試算表雲端連動版</p>
+
+    <div class="card p-5 mb-4">
+        <h2 class="font-bold mb-4">💰 快速入帳 (存入試算表)</h2>
+        <div class="space-y-3">
+            <div><label>日期</label><input type="date" id="moneyDate"></div>
+            <div><label>球種</label><input type="text" id="moneyItemName" placeholder="例如: Tp5"></div>
+            <div><label>售價</label><input type="number" id="price" inputmode="numeric"></div>
+            <div><label>成本</label><input type="number" id="cost" inputmode="numeric"></div>
+            <button onclick="saveMoney()" id="btnM" class="w-full btn-primary py-4 rounded-xl font-bold">儲存到雲端</button>
+        </div>
+    </div>
+
+    <div class="card p-5">
+        <h2 class="font-bold mb-4">📦 銷量統計 (存入試算表)</h2>
+        <div class="space-y-3">
+            <div><label>日期</label><input type="date" id="qtyDate"></div>
+            <div><label>球種</label><input type="text" id="qtyItemName"></div>
+            <div><label>數量</label><input type="number" id="qtyValue" inputmode="numeric"></div>
+            <button onclick="saveQty()" id="btnQ" class="w-full bg-stone-700 text-white py-4 rounded-xl font-bold">儲存銷量</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('moneyDate').valueAsDate = new Date();
+        document.getElementById('qtyDate').valueAsDate = new Date();
+
+        function saveMoney() {
+            const btn = document.getElementById('btnM');
+            btn.innerText = "儲存中...";
+            const data = {
+                date: document.getElementById('moneyDate').value,
+                name: document.getElementById('moneyItemName').value,
+                price: document.getElementById('price').value,
+                cost: document.getElementById('cost').value
+            };
+            google.script.run.withSuccessHandler(() => {
+                btn.innerText = "儲存成功！";
+                setTimeout(() => btn.innerText = "儲存到雲端", 2000);
+                document.getElementById('moneyItemName').value = '';
+            }).processForm('money', data);
+        }
+
+        function saveQty() {
+            const btn = document.getElementById('btnQ');
+            btn.innerText = "儲存中...";
+            const data = {
+                date: document.getElementById('qtyDate').value,
+                name: document.getElementById('qtyItemName').value,
+                qty: document.getElementById('qtyValue').value
+            };
+            google.script.run.withSuccessHandler(() => {
+                btn.innerText = "儲存成功！";
+                setTimeout(() => btn.innerText = "儲存銷量", 2000);
+                document.getElementById('qtyItemName').value = '';
+            }).processForm('qty', data);
+        }
+    </script>
+</body>
+</html>
