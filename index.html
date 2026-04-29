@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>歡迎回來，小雪 ⛳</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; font-family:'Nunito',sans-serif; overflow-x:hidden;
+  position:relative;
+  background:linear-gradient(155deg,#f9f3e8 0%,#f5edd8 15%,#efe3c8 30%,#f7edda 45%,#f2e8d0 60%,#e8dcc0 75%,#f4eadc 90%,#ecddc8 100%);
+  background-size:400% 400%; animation:bgShift 12s ease-in-out infinite;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px;
+}
+@keyframes bgShift { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
+
+.snow-layer { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50; overflow:hidden; }
+
+.blob { position:fixed; border-radius:50%; pointer-events:none; z-index:0; }
+.b1 { width:340px;height:340px;top:-90px;right:-90px;background:radial-gradient(circle,rgba(210,185,145,0.55) 0%,transparent 65%);animation:blobP 7s ease-in-out infinite; }
+.b2 { width:280px;height:280px;bottom:-70px;left:-70px;background:radial-gradient(circle,rgba(195,170,130,0.5) 0%,transparent 65%);animation:blobP 9s ease-in-out infinite reverse; }
+.b3 { width:190px;height:190px;top:35%;right:-20px;background:radial-gradient(circle,rgba(225,205,165,0.45) 0%,transparent 65%);animation:blobP 11s ease-in-out infinite 2s; }
+.b4 { width:150px;height:150px;top:18%;left:4%;background:radial-gradient(circle,rgba(185,160,120,0.35) 0%,transparent 65%);animation:blobP 6s ease-in-out infinite 1s; }
+@keyframes blobP { 0%,100%{transform:scale(1);} 50%{transform:scale(1.18);} }
+
+.page { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:100%;max-width:360px;text-align:center;animation:pageIn 0.9s cubic-bezier(0.34,1.4,0.64,1) both; }
+@keyframes pageIn { from{opacity:0;transform:scale(0.88) translateY(20px);} to{opacity:1;transform:scale(1) translateY(0);} }
+
+.top-flakes { display:flex;gap:10px;align-items:center;margin-bottom:26px; }
+.tf { font-size:22px;animation:spin 10s linear infinite;color:#a08040;filter:drop-shadow(0 2px 5px rgba(160,120,60,0.4)); }
+.tf:nth-child(2){ font-size:28px;animation-duration:7s;animation-direction:reverse;color:#8a6828; }
+.tf:nth-child(3){ animation-duration:13s; }
+@keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+.avatar-wrap { position:relative;width:128px;height:128px;margin-bottom:22px;cursor:pointer; }
+.avatar-ring { width:128px;height:128px;border-radius:50%;padding:4px;background:linear-gradient(135deg,#c8a86a,#f5e8c8,#a07838,#dfc898,#f5e8c8);background-size:300% 300%;animation:ringGrad 5s linear infinite;box-shadow:0 0 0 3px rgba(255,248,230,0.75),0 6px 28px rgba(140,100,40,0.4);transition:transform 0.2s; }
+.avatar-wrap:active .avatar-ring { transform:scale(0.96); }
+@keyframes ringGrad { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+.avatar-inner { width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#f5ecd8,#efe0c0,#faf4e8);display:flex;align-items:center;justify-content:center;font-size:56px;overflow:hidden; }
+.avatar-inner img { width:100%;height:100%;object-fit:cover;border-radius:50%;display:block; }
+.avatar-cam { position:absolute;bottom:3px;right:3px;width:34px;height:34px;background:linear-gradient(135deg,#a07838,#c8a86a);border-radius:50%;border:3px solid rgba(255,248,230,0.92);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 10px rgba(140,100,40,0.5);transition:transform 0.18s; }
+.avatar-wrap:active .avatar-cam { transform:scale(0.88); }
+#avatarInput { display:none; }
+
+.time-chip { background:rgba(255,248,230,0.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1.5px solid rgba(255,240,200,0.82);border-radius:24px;padding:7px 20px;font-size:12px;font-weight:800;color:#6b4500;letter-spacing:1px;margin-bottom:14px;box-shadow:0 2px 14px rgba(140,100,40,0.18);animation:fadeUp 0.5s ease both 0.1s; }
+
+.greeting { font-size:11px;letter-spacing:4px;font-weight:800;color:rgba(100,65,15,0.85);text-transform:uppercase;margin-bottom:6px;animation:fadeUp 0.5s ease both 0.2s; }
+.name-row { display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px;animation:fadeUp 0.5s ease both 0.3s; }
+.name-text { font-size:44px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#5c2e00,#a0520a,#7a3d05,#c47318);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:nameGrad 4s linear infinite;filter:drop-shadow(0 2px 6px rgba(180,120,40,0.35)); }
+@keyframes nameGrad { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
+.name-emoji { font-size:30px;animation:wiggle 2.5s ease-in-out infinite 1s; }
+@keyframes wiggle { 0%,100%{transform:rotate(0);} 25%{transform:rotate(-14deg);} 75%{transform:rotate(14deg);} }
+.shop-name { font-family:‘Noto Serif TC’,serif;font-size:14px;font-weight:700;letter-spacing:2.5px;color:rgba(90,55,10,0.88);margin-bottom:28px;animation:fadeUp 0.5s ease both 0.4s; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+
+.divider { display:flex;align-items:center;gap:10px;width:100%;margin-bottom:22px;animation:fadeUp 0.5s ease both 0.5s; }
+.divider::before,.divider::after { content:’’;flex:1;height:1.5px;background:linear-gradient(90deg,transparent,rgba(160,120,60,0.45),transparent); }
+.divider span { font-size:15px;color:#c8a86a; }
+
+.menu-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-bottom:20px;animation:fadeUp 0.5s ease both 0.6s; }
+.menu-btn-wrap {
+position:relative; border-radius:24px; padding:2px;
+background:#e8d8b8;
+box-shadow:0 4px 16px rgba(140,100,40,0.13);
+transition:transform 0.2s cubic-bezier(0.34,1.5,0.64,1);
+overflow:hidden;
+}
+.menu-btn-wrap::before {
+content:’’;
+position:absolute; inset:-60%;
+background:conic-gradient(from 0deg,transparent 60%,#b8935a 70%,#d4b87a 80%,#9a7040 90%,transparent 100%);
+animation:borderSpin 4s linear infinite;
+z-index:0;
+}
+.menu-btn-wrap:nth-child(2)::before { animation-delay:-1s; }
+.menu-btn-wrap:nth-child(3)::before { animation-delay:-2s; }
+.menu-btn-wrap:nth-child(4)::before { animation-delay:-3s; }
+@keyframes borderSpin { to { transform:rotate(360deg); } }
+.menu-btn-wrap:active { transform:scale(0.94); }
+.menu-btn {
+position:relative; z-index:1;
+background:rgba(255,249,232,0.96);
+backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+border-radius:22px; padding:18px 10px 15px;
+cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px;
+width:100%; height:100%; text-decoration:none;
+box-shadow:0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.menu-icon { font-size:30px;line-height:1; }
+.menu-label { font-size:12px;font-weight:800;color:#5a3200;letter-spacing:0.5px;line-height:1.3; }
+.menu-sub { font-size:9px;font-weight:700;color:rgba(120,75,15,0.65);letter-spacing:1.5px; }
+
+.enter-btn { width:100%;background:linear-gradient(135deg,#a07030 0%,#c8984a 40%,#7a5018 70%,#a07030 100%);background-size:200% 200%;animation:fadeUp 0.5s ease both 0.7s,btnGrad 3s linear infinite;color:#fff8e8;border:none;border-radius:24px;padding:18px;font-size:16px;font-weight:900;font-family:‘Nunito’,sans-serif;letter-spacing:1.5px;cursor:pointer;box-shadow:0 8px 28px rgba(140,90,20,0.45),0 2px 0 rgba(255,240,180,0.35) inset;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;transition:transform 0.15s,box-shadow 0.15s; }
+.enter-btn:active { transform:scale(0.97);box-shadow:0 4px 14px rgba(140,90,20,0.3); }
+@keyframes btnGrad { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
+.enter-btn .bi { font-size:20px;animation:bounce 1.6s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+
+.footer-msg { margin-top:18px;font-size:12px;font-weight:700;color:rgba(100,60,10,0.82);letter-spacing:1px;animation:fadeUp 0.5s ease both 0.8s; }
+</style>
+
+</head>
+<body>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+<div class="blob b4"></div>
+
+<div class="snow-layer" id="snowLayer"></div>
+
+<div class="page">
+  <div class="top-flakes">
+    <span class="tf">❄</span>
+    <span class="tf">⛳</span>
+    <span class="tf">❄</span>
+  </div>
+
+  <input type="file" id="avatarInput" accept="image/*">
+  <div class="avatar-wrap" onclick="document.getElementById('avatarInput').click()">
+    <div class="avatar-ring">
+      <div class="avatar-inner" id="avatarInner">🏌️‍♀️</div>
+    </div>
+    <div class="avatar-cam">📷</div>
+  </div>
+
+  <div class="time-chip" id="timeChip">🌸 早安，小雪</div>
+  <p class="greeting">Welcome Back</p>
+  <div class="name-row">
+    <span class="name-text">小雪</span>
+    <span class="name-emoji">🌸</span>
+  </div>
+  <p class="shop-name">⛳ 上品高爾夫</p>
+  <div class="divider"><span>✦</span><span>⛳</span><span>✦</span></div>
+
+  <div class="menu-grid">
+    <div class="menu-btn-wrap"><div class="menu-btn"><span class="menu-icon">💰</span><span class="menu-label">今日帳務</span><span class="menu-sub">FINANCE</span></div></div>
+    <div class="menu-btn-wrap"><div class="menu-btn"><span class="menu-icon">📦</span><span class="menu-label">銷量統計</span><span class="menu-sub">SALES</span></div></div>
+    <div class="menu-btn-wrap"><div class="menu-btn"><span class="menu-icon">🚚</span><span class="menu-label">運費管理</span><span class="menu-sub">SHIPPING</span></div></div>
+    <div class="menu-btn-wrap"><div class="menu-btn"><span class="menu-icon">📊</span><span class="menu-label">年度報表</span><span class="menu-sub">REPORT</span></div></div>
+  </div>
+
+  <a href="golf_v18.html" class="enter-btn">
+    <span class="bi">⛳</span>進入經營系統<span class="bi">✨</span>
+  </a>
+  <p class="footer-msg" id="dateMsg">今天也要加油喔～ ❄️</p>
+</div>
+
+<script>
+// ── 雪花：純 JS + requestAnimationFrame，不依賴 CSS custom property ──
+const snowLayer = document.getElementById('snowLayer');
+const CHARS  = ['❄','❅','❆','✦','❋','✿','·','•'];
+const COLORS = [
+  'rgba(200,165,90,0.80)',
+  'rgba(180,145,75,0.75)',
+  'rgba(220,190,110,0.78)',
+  'rgba(160,130,70,0.72)',
+  'rgba(240,205,130,0.70)',
+  'rgba(150,120,60,0.65)',
+];
+
+function spawnFlake() {
+  const el     = document.createElement('span');
+  el.textContent = CHARS[Math.random() * CHARS.length | 0];
+  const size   = Math.random() * 20 + 9;
+  const startX = Math.random() * window.innerWidth;
+  const driftX = (Math.random() - 0.5) * 130;
+  const speed  = Math.random() * 1.4 + 0.6;
+  const spin   = (Math.random() - 0.5) * 2.5;
+  const color  = COLORS[Math.random() * COLORS.length | 0];
+
+  el.style.cssText =
+    'position:absolute;font-size:' + size + 'px;color:' + color +
+    ';text-shadow:0 1px 8px rgba(255,220,130,0.8);left:' + startX +
+    'px;top:-' + (size+10) + 'px;pointer-events:none;user-select:none;will-change:transform,opacity;';
+
+  snowLayer.appendChild(el);
+
+  const H = window.innerHeight;
+  let y   = -(size + 10);
+  let rot = 0;
+
+  function step() {
+    y   += speed;
+    rot += spin;
+    const op = y < H * 0.08  ? y / (H * 0.08)
+             : y > H * 0.88  ? 1 - (y - H * 0.88) / (H * 0.12)
+             : 1;
+    el.style.transform = 'translate(' + (driftX * y / H) + 'px,' + y + 'px) rotate(' + rot + 'deg)';
+    el.style.opacity   = Math.max(0, Math.min(1, op));
+    if (y < H + size + 20) {
+      requestAnimationFrame(step);
+    } else {
+      el.remove();
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+for (let i = 0; i < 28; i++) setTimeout(spawnFlake, Math.random() * 4000);
+setInterval(spawnFlake, 480);
+
+// ── 時間問候 ──
+function updateGreeting() {
+  const h = new Date().getHours();
+  const now = new Date();
+  const chip = document.getElementById('timeChip');
+  const dateMsg = document.getElementById('dateMsg');
+  const d = (now.getMonth()+1) + '月' + now.getDate() + '日';
+  chip.textContent =
+    h < 6  ? '🌙 深夜了，辛苦了' :
+    h < 10 ? '🌸 早安，小雪'     :
+    h < 12 ? '☀️ 上午好，小雪'   :
+    h < 14 ? '🌞 午安，小雪'     :
+    h < 18 ? '🍃 下午好，小雪'   :
+    h < 21 ? '🌆 晚安，小雪'     : '🌙 夜深了，記得休息';
+  dateMsg.textContent = d + '　今天也要加油喔～ ❄️';
+}
+updateGreeting();
+
+// ── 頭像 ──
+const avatarInput = document.getElementById('avatarInput');
+const avatarInner = document.getElementById('avatarInner');
+const AVATAR_KEY  = 'xiaoXue_avatar_v1';
+function loadAvatar() {
+  try { const s = localStorage.getItem(AVATAR_KEY); if (s) avatarInner.innerHTML = '<img src="'+s+'" alt="頭像">'; } catch(e) {}
+}
+avatarInput.addEventListener('change', function() {
+  const file = this.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    avatarInner.innerHTML = '<img src="'+e.target.result+'" alt="頭像">';
+    try { localStorage.setItem(AVATAR_KEY, e.target.result); } catch(err) {}
+  };
+  reader.readAsDataURL(file);
+});
+loadAvatar();
+</script>
+
+</body>
+</html>
